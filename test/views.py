@@ -1,12 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.conf import settings
-
-from django.http import HttpResponseRedirect
-
-from django import forms
-
 from .models import app
 
+from django.http import HttpResponse, Http404
 
 def index(request, app_name):
     actual=app.objects.get(name=app_name)
@@ -24,8 +20,7 @@ def handle_uploaded_file(f):
 def leerlineas(file):
     entrada=open(file,"r")
     salida=open("test/salida.txt", "w")
-    lineas=entrada.readlines()
-    salida.write(str(len(lineas)))
+    salida.write(str(len(entrada.readlines())))
     entrada.close()
     salida.close()
     return 0
@@ -38,9 +33,29 @@ def cabecera(file):
     salida.close()
     return 0
 
-def processJob(request,app_name):
+def timeTest():
+    import time
+    start = time. time()
+    time.sleep(7)
+    salida=open("test/salida.txt","w")
+    end = time. time()
+    salida.write(str(end-start))
+    salida.close()
+    return 0
+
+def processJob(request, app_name):
+    actual=app.objects.get(name=app_name)
     if request.method == 'POST':
         handle_uploaded_file(request.FILES['archivo'])
+        timeTest()
         leerlineas("test/archivo.txt")
+        return redirect("job", app_name=actual.name)
 
-    return render(request, '../templates/front.html')
+    return render(request, '../templates/result.html')
+
+
+def download(request, app_name):
+    with open("test/salida.txt", 'rb') as fh:
+        response = HttpResponse(fh.read(), content_type="text")
+        response['Content-Disposition'] = 'inline; filename=download.txt'
+        return response

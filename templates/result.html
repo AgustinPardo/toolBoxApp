@@ -10,22 +10,11 @@
   </head>
   <body>
       <div  class="container my-5 text-center">
-          {% block title %} 
-          <h1>{{ title }} </h1>
-          <h1>{{ description }} </h1>
-          {% endblock %}
 
-        <form method="post" enctype="multipart/form-data" action="/test/{{ title }}/job">
+        <form method="post" enctype="multipart/form-data" action="download">
           {% csrf_token %}
-          <input type="file" name="archivo">
-          <button type="submit" onclick="">Subir</button>
+          <button type="submit">Descargar</button>
         </form>
-
-        <h1> </h1>
-
-        <div id="progress" class="container">
-
-        </div>
 
       </div>
 <script>
