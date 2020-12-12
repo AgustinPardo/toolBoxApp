@@ -1,2 +1,4 @@
 test/__pycache__/
 test/sif
+test/sif_core/H37Rv-CHROM.sbml
+test/wc

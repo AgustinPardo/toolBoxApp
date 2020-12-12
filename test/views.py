@@ -39,13 +39,17 @@ def processJob(request, app_name):
 
         actual.run_app(path_upload+input_file, path_upload+"result"+"_"+current_time)
 
-        return redirect("job", app_name=actual.name)
+        return redirect("viewjob", app_name=actual.name, job_id=current_time)
 
-    return render(request, '../templates/result.html')
+    #return redirect("job", app_name=actual.name)
+    #return render(request, '../templates/result.html')
 
+def viewJob(request, app_name, job_id):
+    return render(request, '../templates/result.html', {'app_name' : app_name ,'job_id' : job_id })
 
-def download(request, app_name):
-    with open("test/salida.txt", 'rb') as fh:
+def download(request, app_name, job_id):
+    path_file="test/"+app_name+"/"+"result"+"_"+job_id
+    with open(path_file, 'rb') as fh:
         response = HttpResponse(fh.read(), content_type="text")
         response['Content-Disposition'] = 'inline; filename=download.txt'
         return response
